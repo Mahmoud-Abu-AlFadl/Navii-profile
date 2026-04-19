@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navii — Smart Assistive Glasses | AI-Powered Independence</title>
+  <meta name="description"
+    content="Navii: AI-powered smart glasses giving visually impaired individuals real-time environmental awareness, independence, and safety.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ==========================================
+       NAVIGATION
+       ========================================== -->
+  <nav id="navbar">
+    <a class="nav-logo" href="#hero" id="nav-logo">Nav<span>ii</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#problem" id="nav-problem">Problem</a></li>
+      <li><a href="#solution" id="nav-solution">Solution</a></li>
+      <li><a href="#how" id="nav-how">How It Works</a></li>
+      <li><a href="#tech" id="nav-tech">Technology</a></li>
+      <li><a href="#team" id="nav-team">Team</a></li>
+      <li><a href="#gallery" id="nav-gallery">Gallery</a></li>
+      <li><a href="#future" id="nav-future">Roadmap</a></li>
+    </ul>
+    <a class="nav-cta" href="#team" id="nav-cta-btn">Meet the Team</a>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#problem" onclick="closeMenu()">Problem</a>
+    <a href="#solution" onclick="closeMenu()">Solution</a>
+    <a href="#how" onclick="closeMenu()">How It Works</a>
+    <a href="#tech" onclick="closeMenu()">Technology</a>
+    <a href="#team" onclick="closeMenu()">Team</a>
+    <a href="#gallery" onclick="closeMenu()">Gallery</a>
+    <a href="#future" onclick="closeMenu()">Roadmap</a>
+  </div>
+
+  <!-- ==========================================
+       HERO SECTION
+       ========================================== -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span class="hero-badge-dot"></span>
+        University Engineering Showcase &nbsp;·&nbsp; 2024–2025
+      </div>
+      <h1 class="hero-title reveal">See the World<br>Through <em>Navii</em></h1>
+      <p class="hero-subtitle reveal">AI-powered smart glasses that give visually impaired individuals real-time
+        environmental awareness, independence, and safety — without a screen, without a phone.</p>
+      <div class="hero-actions reveal">
+        <a class="btn-primary" href="#solution" id="hero-cta-discover">
+          Discover the Project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+        <a class="btn-secondary" href="#team" id="hero-cta-team">Meet the Team</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div class="hero-stat">
+          <span class="hero-stat-val">253M+</span>
+          <span class="hero-stat-lbl">People affected globally</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-val">Real-Time</span>
+          <span class="hero-stat-lbl">AI obstacle detection</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-val">Proactive</span>
+          <span class="hero-stat-lbl">Warns before danger</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-val">&lt;$150</span>
+          <span class="hero-stat-lbl">Target component cost</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       PROBLEM SECTION
+       ========================================== -->
+  <section id="problem">
+    <div class="container">
+      <div class="problem-grid">
+        <div class="problem-text">
+          <div class="section-tag reveal">The Problem</div>
+          <h2 class="section-title reveal">A World Not Built for Everyone</h2>
+          <div class="divider reveal"></div>
+          <p class="reveal">Visual impairment affects over <strong>253 million people worldwide</strong> — yet the tools
+            available to them have changed little in decades. The traditional white cane is effective, but fundamentally
+            limited.</p>
+          <p class="reveal">It only detects what is directly underfoot. A chair at chest height, a glass door, a
+            staircase ahead — these remain invisible until it's <strong>too late</strong>. The problem is not just
+            vision loss. It is the <strong>loss of safety, confidence, and independence</strong>.</p>
+          <p class="reveal">Existing tech solutions require visual screen interaction, sighted setup, or constant manual
+            operation — making them impractical for daily independent use.</p>
+        </div>
+        <div>
+          <div class="stat-highlight reveal">
+            <span class="stat-num" data-target="253" data-suffix="M+">253M+</span>
+            <span class="stat-lbl">People living with visual impairment globally<br><small
+                style="color:var(--text3)">Source: World Health Organization</small></span>
+          </div>
+          <div class="problem-cards">
+            <div class="prob-card reveal">
+              <div class="prob-icon red">&#9888;</div>
+              <div>
+                <div class="prob-card-title">Traditional Cane Falls Short</div>
+                <div class="prob-card-text">Only detects ground-level obstacles — no awareness of chest or head-height
+                  hazards.</div>
+              </div>
+            </div>
+            <div class="prob-card reveal">
+              <div class="prob-icon amber">&#128241;</div>
+              <div>
+                <div class="prob-card-title">Apps Require Sight to Use</div>
+                <div class="prob-card-text">Smartphone solutions demand screen interaction and sighted setup — defeating
+                  the purpose.</div>
+              </div>
+            </div>
+            <div class="prob-card reveal">
+              <div class="prob-icon teal">&#128279;</div>
+              <div>
+                <div class="prob-card-title">No Affordable All-in-One Exists</div>
+                <div class="prob-card-text">No wearable combines detection, recognition, text reading, and audio
+                  feedback at scale.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SOLUTION SECTION
+       ========================================== -->
+  <section id="solution">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:1rem">
+        <div class="section-tag reveal" style="justify-content:center">Our Solution</div>
+        <h2 class="section-title reveal">Introducing Navii</h2>
+        <p class="section-sub reveal" style="margin:1rem auto 0">A wearable AI system that transforms passive navigation
+          into an informed, confident, and fully independent experience.</p>
+      </div>
+      <div class="divider reveal" style="margin:1.5rem auto 0"></div>
+      <div class="feature-grid">
+        <div class="feat-card reveal">
+          <div class="feat-icon">🔊</div>
+          <div class="feat-num">Feature 01</div>
+          <div class="feat-title">Multi-Level Obstacle Detection</div>
+          <div class="feat-text">Ultrasonic sensors detect obstacles at ground, waist, and head levels within a 3-meter
+            range. Haptic feedback intensity increases as hazards get closer.</div>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">🤖</div>
+          <div class="feat-num">Feature 02</div>
+          <div class="feat-title">AI Object Classification</div>
+          <div class="feat-text">YOLO-based on-device AI classifies objects in real time — telling the user not just
+            "something is there" but "a chair is ahead" or "a person is approaching."</div>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">📖</div>
+          <div class="feat-num">Feature 03</div>
+          <div class="feat-title">OCR Text Reading</div>
+          <div class="feat-text">Points the camera at any printed text — signs, labels, menus — and reads it aloud
+            instantly. Dramatically expands independence in public spaces.</div>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">👓</div>
+          <div class="feat-num">Feature 04</div>
+          <div class="feat-title">Hands-Free &amp; Screen-Free</div>
+          <div class="feat-text">No phone. No screen. No buttons. Navii works automatically from the moment it is worn —
+            fully passive, always on.</div>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">🎧</div>
+          <div class="feat-num">Feature 05</div>
+          <div class="feat-title">Audio + Haptic Feedback</div>
+          <div class="feat-text">Bone conduction audio keeps ears unobstructed while delivering clear spoken
+            descriptions. Vibration motors provide a secondary channel in noisy environments.</div>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">⚡</div>
+          <div class="feat-num">Feature 06</div>
+          <div class="feat-title">Lightweight Wearable Design</div>
+          <div class="feat-text">Housed in a glasses frame with an integrated rechargeable battery. Built for all-day
+            comfort — portability was a constraint, not an afterthought.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       HOW IT WORKS SECTION
+       ========================================== -->
+  <section id="how">
+    <div class="container">
+      <div style="text-align:center">
+        <div class="section-tag reveal" style="justify-content:center">How It Works</div>
+        <h2 class="section-title reveal">From Scene to Signal</h2>
+        <p class="section-sub reveal" style="margin:1rem auto">A continuous real-time loop that starts the moment the
+          glasses are worn — and never stops.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <div class="step-label">Capture</div>
+            <div class="step-title">The Environment is Scanned</div>
+            <div class="step-text">The camera captures continuous video frames while ultrasonic sensors emit pulses to
+              measure the distance to nearby objects in real time.</div>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <div class="step-label">Analyze</div>
+            <div class="step-title">AI Processes the Scene</div>
+            <div class="step-text">The onboard AI processor runs lightweight computer vision models to detect obstacles,
+              identify object types, and extract printed text from the captured frames.</div>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <div class="step-label">Decide</div>
+            <div class="step-title">Relevance is Determined</div>
+            <div class="step-text">The system evaluates proximity, object type, and context — filtering noise and
+              determining exactly what information the user needs at that moment.</div>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <div class="step-label">Communicate</div>
+            <div class="step-title">The User is Alerted</div>
+            <div class="step-text">Immediate feedback is delivered: a spoken audio description of the environment, or a
+              haptic vibration pattern indicating obstacle proximity and severity.</div>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">05</div>
+          <div class="step-content">
+            <div class="step-label">Loop</div>
+            <div class="step-title">The Cycle Repeats Instantly</div>
+            <div class="step-text">The entire pipeline repeats continuously, adapting to the user's changing environment
+              with zero manual input required — ever.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       TECHNOLOGY SECTION
+       ========================================== -->
+  <section id="tech">
+    <div class="container">
+      <div>
+        <div class="section-tag reveal">Technology</div>
+        <h2 class="section-title reveal">The Technology Inside</h2>
+        <div class="divider reveal"></div>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card reveal">
+          <div class="tech-icon">🎖️</div>
+          <div class="tech-name">Raspberry Pi</div>
+          <div class="tech-desc">Onboard AI processing unit powering the entire system</div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon">📷</div>
+          <div class="tech-name">Camera Module</div>
+          <div class="tech-desc">Continuous real-time video capture for scene analysis</div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon">🔌</div>
+          <div class="tech-name">Ultrasonic Sensors</div>
+          <div class="tech-desc">Multi-angle distance measurement for obstacle proximity</div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon">🤖</div>
+          <div class="tech-name">YOLO AI Model</div>
+          <div class="tech-desc">Lightweight on-device object detection and classification</div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon">👁</div>
+          <div class="tech-name">OpenCV</div>
+          <div class="tech-desc">Video frame processing and camera pipeline management</div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon">💬</div>
+          <div class="tech-name">TTS Engine</div>
+          <div class="tech-desc">Natural speech audio output for environment descriptions</div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon">🎵</div>
+          <div class="tech-name">Bone Conduction</div>
+          <div class="tech-desc">Audio feedback that keeps ears open to surroundings</div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon">🐍</div>
+          <div class="tech-name">Python</div>
+          <div class="tech-desc">Fully modular software stack for the complete pipeline</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       TEAM SECTION
+       ========================================== -->
+  <section id="team">
+    <div class="container">
+      <div style="text-align:center">
+        <div class="section-tag reveal" style="justify-content:center">The People</div>
+        <h2 class="section-title reveal">The Team Behind Navii</h2>
+        <p class="section-sub reveal" style="margin:1rem auto">Six engineers. One mission. Turning a human problem into
+          a real working solution.</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <div class="avatar-wrapper av-teal">
+            <img src="images/team/mahmoud-ayman.png?v=2" alt="Mahmoud Ayman" class="avatar-img" loading="lazy">
+          </div>
+          <div class="team-info">
+            <div class="team-name">Mahmoud Ayman</div>
+            <div class="team-id">ID: 240102281</div>
+            <div class="team-role">Team Leader &amp; System Architecture</div>
+            <a href="mailto:mahmoud240102281@sut.edu.eg" class="team-email">mahmoud240102281@sut.edu.eg</a>
+            <span class="team-badge">Lead</span>
+          </div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar-wrapper av-coral">
+            <img src="images/team/hamza-saadallah.png?v=2" alt="Hamza Saadallah" class="avatar-img" loading="lazy">
+          </div>
+          <div class="team-info">
+            <div class="team-name">Hamza Saadallah</div>
+            <div class="team-id">ID: 240103221</div>
+            <div class="team-role">Hardware Design &amp; Sensor Integration</div>
+            <a href="mailto:hamza240103221@sut.edu.eg" class="team-email">hamza240103221@sut.edu.eg</a>
+            <span class="team-badge">Hardware</span>
+          </div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar-wrapper av-gold">
+            <img src="images/team/retaj-ahmed.png?v=2" alt="Retaj Ahmed" class="avatar-img" loading="lazy">
+          </div>
+          <div class="team-info">
+            <div class="team-name">Retaj Ahmed</div>
+            <div class="team-id">ID: 240102969</div>
+            <div class="team-role">Software Development &amp; OCR Implementation</div>
+            <a href="mailto:retaj240102969@sut.edu.eg" class="team-email">retaj240102969@sut.edu.eg</a>
+            <span class="team-badge">Software</span>
+          </div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar-wrapper av-blue">
+            <img src="images/team/omar-rady.png?v=2" alt="Omar Rady" class="avatar-img" loading="lazy">
+          </div>
+          <div class="team-info">
+            <div class="team-name">Omar Rady</div>
+            <div class="team-id">ID: 240102885</div>
+            <div class="team-role">AI Model Integration &amp; Data Collection</div>
+            <a href="mailto:omar240102885@sut.edu.eg" class="team-email">omar240102885@sut.edu.eg</a>
+            <span class="team-badge">AI / ML</span>
+          </div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar-wrapper av-purple">
+            <img src="images/team/zeyad-mahmoud.png?v=2" alt="Zeyad Mahmoud" class="avatar-img" loading="lazy">
+          </div>
+          <div class="team-info">
+            <div class="team-name">Zeyad Mahmoud</div>
+            <div class="team-id">ID: 240103128</div>
+            <div class="team-role">Computer Vision &amp; Documentation</div>
+            <a href="mailto:zeyad240103128@sut.edu.eg" class="team-email">zeyad240103128@sut.edu.eg</a>
+            <span class="team-badge">Vision</span>
+          </div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar-wrapper av-green">
+            <img src="images/team/mohamed-nasser.png?v=2" alt="Mohamed Nasser" class="avatar-img" loading="lazy">
+          </div>
+          <div class="team-info">
+            <div class="team-name">Mohamed Nasser</div>
+            <div class="team-id">ID: 240102350</div>
+            <div class="team-role">Testing, Validation &amp; Performance Evaluation</div>
+            <a href="mailto:mohamed240102350@sut.edu.eg" class="team-email">mohamed240102350@sut.edu.eg</a>
+            <span class="team-badge">QA / Testing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       GALLERY SECTION
+       ========================================== -->
+  <section id="gallery">
+    <div class="container">
+      <div style="text-align:center">
+        <div class="section-tag reveal" style="justify-content:center">Behind the Scenes</div>
+        <h2 class="section-title reveal">Building Navii</h2>
+        <p class="section-sub reveal" style="margin:1rem auto">From brainstorming sessions to prototype testing — a look
+          at how Navii came to life.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item gallery-item--wide reveal">
+          <img src="images/gallery/brainstorm.png" alt="Team brainstorming session" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Brainstorming Session</span>
+            <span class="gallery-subcaption">Mapping out the system architecture</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="images/gallery/hardware-assembly.png" alt="Hardware assembly" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Hardware Assembly</span>
+            <span class="gallery-subcaption">Integrating sensors &amp; components</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="images/gallery/coding-session.png" alt="Coding session" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-caption">AI Development</span>
+            <span class="gallery-subcaption">Training the YOLO detection model</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="images/gallery/prototype-testing.png" alt="Prototype testing" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Prototype Testing</span>
+            <span class="gallery-subcaption">Real-world obstacle detection trials</span>
+          </div>
+        </div>
+        <div class="gallery-item gallery-item--wide reveal">
+          <img src="images/gallery/team-discussion.png" alt="Team discussion" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Team Collaboration</span>
+            <span class="gallery-subcaption">Reviewing progress &amp; next steps</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="images/gallery/presentation.png" alt="Project presentation" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Project Presentation</span>
+            <span class="gallery-subcaption">Showcasing Navii to the faculty</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       ROADMAP SECTION
+       ========================================== -->
+  <section id="future">
+    <div class="container">
+      <div>
+        <div class="section-tag reveal">Roadmap</div>
+        <h2 class="section-title reveal">What's Next for Navii</h2>
+        <p class="section-sub reveal">The prototype proves the concept. The roadmap takes it to a real-world product.
+        </p>
+      </div>
+      <div class="future-grid">
+        <div class="future-card reveal">
+          <div class="tag hot">&#9654; High Priority</div>
+          <div class="future-title">Arabic Language Support</div>
+          <div class="future-text">Full Arabic TTS output and OCR text recognition — making Navii accessible to 14M+
+            visually impaired individuals in the Arab world.</div>
+        </div>
+        <div class="future-card reveal">
+          <div class="tag hot">&#9654; High Priority</div>
+          <div class="future-title">ESP32 Integration</div>
+          <div class="future-text">Migrating to an ESP32-based architecture to dramatically reduce device size, power
+            consumption, and production cost — a critical step toward mass production.</div>
+        </div>
+        <div class="future-card reveal">
+          <div class="tag core">&#9654; Core Enhancement</div>
+          <div class="future-title">Cloud-Assisted AI</div>
+          <div class="future-text">Optional cloud inference for improved accuracy in complex environments, while
+            maintaining full on-device fallback for offline use.</div>
+        </div>
+        <div class="future-card reveal">
+          <div class="tag core">&#9654; Core Enhancement</div>
+          <div class="future-title">Indoor Navigation &amp; GPS</div>
+          <div class="future-text">IMU and GPS integration for turn-by-turn audio navigation within campuses, offices,
+            hospitals, and familiar environments.</div>
+        </div>
+        <div class="future-card reveal">
+          <div class="tag core">&#9654; Core Enhancement</div>
+          <div class="future-title">Expanded Language Support</div>
+          <div class="future-text">Beyond Arabic — adding French and Urdu to serve larger global communities of visually
+            impaired users across different regions.</div>
+        </div>
+        <div class="future-card reveal">
+          <div class="tag core">&#9654; Core Enhancement</div>
+          <div class="future-title">Companion Mobile App</div>
+          <div class="future-text">An optional app for caregivers to configure preferences, update AI models, and review
+            activity — without requiring any interaction from the user.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer>
+    <div class="footer-logo">Navii</div>
+    <div class="footer-tag">"Enabling independence, one step at a time."</div>
+    <div class="footer-links">
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#how">How It Works</a>
+      <a href="#tech">Technology</a>
+      <a href="#team">Team</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#future">Roadmap</a>
+    </div>
+    <div class="footer-meta">University Engineering Showcase &nbsp;·&nbsp; 2024–2025</div>
+  </footer>
+
+  <!-- Application Script -->
+  <script src="js/main.js" defer></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navii — Smart Assistive Glasses | AI-Powered Independence</title>
+<meta name="description" content="Navii: AI-powered smart glasses giving visually impaired individuals real-time environmental awareness, independence, and safety.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+/* =========================================
+   RESET & VARIABLES
+   ========================================= */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --navy:#080f1a;
+  --navy2:#0c1524;
+  --navy3:#111d30;
+  --teal:#00e5c8;
+  --teal-dim:#00b8a0;
+  --teal-glow:rgba(0,229,200,0.15);
+  --teal-glow2:rgba(0,229,200,0.08);
+  --accent:#ff6b6b;
+  --accent-glow:rgba(255,107,107,0.12);
+  --gold:#f7c59f;
+  --gold-glow:rgba(247,197,159,0.12);
+  --text:#f0f6fc;
+  --text2:#8da3b8;
+  --text3:#4c6578;
+  --border:rgba(0,229,200,0.1);
+  --border2:rgba(0,229,200,0.06);
+  --card:rgba(255,255,255,0.025);
+  --card-hover:rgba(0,229,200,0.04);
+  --glass:rgba(8,15,26,0.7);
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-xs:6px;
+  --transition:cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-spring:cubic-bezier(0.34, 1.56, 0.64, 1);
+  --shadow-glow:0 0 60px rgba(0,229,200,0.06);
+  --shadow-card:0 4px 24px rgba(0,0,0,0.2);
+  --shadow-card-hover:0 12px 48px rgba(0,0,0,0.3), 0 0 40px rgba(0,229,200,0.06);
+}
+
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--text3) var(--navy)}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--navy);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;line-height:1.1;letter-spacing:-0.03em}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--teal-dim)}
+
+/* Selection */
+::selection{background:rgba(0,229,200,0.2);color:var(--text)}
+
+/* =========================================
+   CURSOR GLOW (desktop only)
+   ========================================= */
+.cursor-glow{
+  position:fixed;
+  width:500px;height:500px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,229,200,0.04) 0%,transparent 70%);
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:opacity 0.3s;
+  opacity:0;
+  will-change:transform;
+}
+@media(pointer:fine){.cursor-glow{opacity:1}}
+
+/* =========================================
+   NAVIGATION
+   ========================================= */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0 clamp(1.5rem,4vw,3rem);
+  height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all 0.4s var(--transition);
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{
+  background:rgba(8,15,26,0.85);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-color:var(--border2);
+  box-shadow:0 1px 20px rgba(0,0,0,0.3);
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;
+  background:linear-gradient(135deg,var(--teal),#00ffdd);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-0.03em;
+  position:relative;
+}
+.nav-logo span{
+  -webkit-text-fill-color:var(--text);
+}
+.nav-links{display:flex;gap:0.25rem;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--text2);
+  font-size:0.875rem;
+  font-weight:500;
+  padding:0.5rem 1rem;
+  border-radius:8px;
+  transition:all 0.25s var(--transition);
+  position:relative;
+}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.nav-links a.active{color:var(--teal)}
+
+.nav-cta{
+  background:linear-gradient(135deg,var(--teal),#00d4b8);
+  color:var(--navy);
+  padding:0.6rem 1.5rem;
+  border-radius:100px;
+  font-weight:700;
+  font-size:0.85rem;
+  font-family:'Syne',sans-serif;
+  letter-spacing:-0.01em;
+  transition:all 0.3s var(--transition);
+  box-shadow:0 2px 12px rgba(0,229,200,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.nav-cta::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.nav-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 24px rgba(0,229,200,0.35);
+}
+.nav-cta:hover::before{opacity:1}
+.nav-cta:active{transform:translateY(0);box-shadow:0 2px 8px rgba(0,229,200,0.2)}
+
+/* Hamburger */
+.hamburger{
+  display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;
+  border-radius:8px;transition:background 0.2s;z-index:1001;
+}
+.hamburger:hover{background:rgba(255,255,255,0.05)}
+.hamburger span{
+  width:20px;height:2px;background:var(--text);border-radius:2px;
+  transition:all 0.3s var(--transition);transform-origin:center;
+}
+.hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Mobile menu */
+.mobile-menu{
+  display:none;position:fixed;inset:0;
+  background:rgba(8,15,26,0.95);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  z-index:999;
+  flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  opacity:0;visibility:hidden;transition:all 0.4s var(--transition);
+}
+.mobile-menu.open{opacity:1;visibility:visible}
+.mobile-menu a{
+  font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;
+  color:var(--text);transition:color 0.2s;
+}
+.mobile-menu a:hover{color:var(--teal)}
+
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .mobile-menu{display:flex}
+}
+
+/* =========================================
+   HERO
+   ========================================= */
+#hero{
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  padding:8rem 2rem 6rem;
+  position:relative;overflow:hidden;text-align:center;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 20%,rgba(0,229,200,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 30% 70%,rgba(0,229,200,0.03) 0%,transparent 50%),
+    radial-gradient(ellipse 50% 50% at 80% 60%,rgba(100,160,255,0.02) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,229,200,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,200,0.04) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,black 20%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,black 20%,transparent 80%);
+  pointer-events:none;
+}
+/* Floating orbs */
+.hero-orb{
+  position:absolute;border-radius:50%;pointer-events:none;
+  filter:blur(80px);opacity:0.4;
+}
+.hero-orb-1{width:400px;height:400px;background:rgba(0,229,200,0.08);top:10%;left:-5%}
+.hero-orb-2{width:300px;height:300px;background:rgba(100,160,255,0.06);bottom:20%;right:-5%}
+.hero-orb-3{width:200px;height:200px;background:rgba(0,229,200,0.05);top:60%;left:50%}
+
+.hero-content{position:relative;z-index:1;max-width:900px}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  background:rgba(0,229,200,0.06);
+  border:1px solid rgba(0,229,200,0.12);
+  padding:0.4rem 1.25rem;border-radius:100px;
+  font-size:0.8rem;color:var(--teal);font-weight:600;
+  margin-bottom:2.5rem;letter-spacing:0.04em;
+  backdrop-filter:blur(8px);
+}
+.hero-badge-dot{
+  width:6px;height:6px;background:var(--teal);border-radius:50%;
+  animation:pulseDot 2s ease-in-out infinite;
+  box-shadow:0 0 8px var(--teal);
+}
+@keyframes pulseDot{
+  0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 8px var(--teal)}
+  50%{opacity:0.5;transform:scale(0.7);box-shadow:0 0 4px var(--teal)}
+}
+
+.hero-title{
+  font-size:clamp(3rem,8vw,6rem);font-weight:800;
+  letter-spacing:-0.04em;margin-bottom:1.5rem;
+  line-height:1;
+}
+.hero-title em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--teal),#00ffdd,#40e0d0);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  position:relative;
+}
+.hero-title em::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),transparent);border-radius:2px;
+}
+.hero-subtitle{
+  font-size:clamp(1rem,2vw,1.2rem);
+  color:var(--text2);max-width:600px;margin:0 auto 3rem;
+  font-weight:400;line-height:1.8;
+}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* Buttons */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:linear-gradient(135deg,var(--teal),#00d4b8);
+  color:var(--navy);padding:0.9rem 2.25rem;border-radius:100px;
+  font-weight:700;font-size:0.95rem;
+  font-family:'Syne',sans-serif;letter-spacing:-0.01em;
+  transition:all 0.35s var(--transition);
+  box-shadow:0 4px 20px rgba(0,229,200,0.25);
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.25),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(0,229,200,0.4);
+}
+.btn-primary:hover::before{opacity:1}
+.btn-primary:active{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,229,200,0.3)}
+.btn-primary svg{width:16px;height:16px;transition:transform 0.3s var(--transition)}
+.btn-primary:hover svg{transform:translateX(3px)}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:rgba(255,255,255,0.04);
+  color:var(--text);padding:0.9rem 2.25rem;border-radius:100px;
+  font-weight:600;font-size:0.95rem;
+  font-family:'Syne',sans-serif;
+  border:1px solid rgba(255,255,255,0.1);
+  transition:all 0.35s var(--transition);
+  backdrop-filter:blur(4px);
+}
+.btn-secondary:hover{
+  border-color:var(--teal);color:var(--teal);
+  background:rgba(0,229,200,0.04);
+  transform:translateY(-2px);
+  box-shadow:0 4px 20px rgba(0,229,200,0.1);
+}
+
+/* Hero Stats */
+.hero-stats{
+  display:flex;gap:2rem;justify-content:center;margin-top:5rem;flex-wrap:wrap;
+  padding:2rem 2.5rem;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--border2);
+  border-radius:20px;
+  backdrop-filter:blur(8px);
+}
+.hero-stat{text-align:center;padding:0.5rem 1rem}
+.hero-stat-val{
+  font-family:'Syne',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);
+  font-weight:800;display:block;margin-bottom:0.25rem;
+  background:linear-gradient(135deg,var(--teal),#3abfb0);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-stat-lbl{font-size:0.78rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+
+/* Divider between stats */
+.hero-stat + .hero-stat{border-left:1px solid var(--border2);padding-left:2rem}
+@media(max-width:640px){
+  .hero-stat + .hero-stat{border-left:none;padding-left:1rem}
+  .hero-stats{gap:1rem;padding:1.5rem}
+}
+
+/* =========================================
+   SECTIONS (shared)
+   ========================================= */
+section{padding:clamp(4rem,10vw,8rem) clamp(1.5rem,4vw,2.5rem)}
+.container{max-width:1140px;margin:0 auto}
+
+.section-tag{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.75rem;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.12em;
+  margin-bottom:1.25rem;
+}
+.section-tag::before{
+  content:'';width:24px;height:1.5px;
+  background:linear-gradient(90deg,var(--teal),transparent);
+}
+.section-title{
+  font-size:clamp(2rem,5vw,3.2rem);
+  font-weight:800;letter-spacing:-0.04em;margin-bottom:1.25rem;
+}
+.section-sub{
+  font-size:1.05rem;color:var(--text2);max-width:580px;
+  font-weight:400;line-height:1.8;margin-bottom:3.5rem;
+}
+.divider{
+  width:48px;height:3px;
+  background:linear-gradient(90deg,var(--teal),transparent);
+  border-radius:2px;margin:1.5rem 0;
+}
+
+/* =========================================
+   PROBLEM SECTION
+   ========================================= */
+#problem{
+  background:var(--navy2);
+  position:relative;
+  overflow:hidden;
+}
+#problem::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+#problem::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+@media(max-width:900px){.problem-grid{grid-template-columns:1fr;gap:3rem}}
+
+.problem-text p{color:var(--text2);line-height:1.9;margin-bottom:1.25rem;font-weight:400;font-size:0.95rem}
+.problem-text p strong{color:var(--text);font-weight:600}
+
+.stat-highlight{
+  background:linear-gradient(135deg,rgba(0,229,200,0.06),rgba(0,229,200,0.01));
+  border:1px solid var(--border);
+  border-radius:20px;padding:2.5rem;text-align:center;margin-bottom:1.5rem;
+  position:relative;overflow:hidden;
+}
+.stat-highlight::before{
+  content:'';position:absolute;top:-1px;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+}
+.stat-num{
+  font-family:'Syne',sans-serif;font-size:clamp(2.5rem,6vw,4rem);
+  font-weight:800;display:block;line-height:1;
+  background:linear-gradient(135deg,var(--teal),#00ffdd);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-lbl{font-size:0.85rem;color:var(--text2);margin-top:0.75rem;display:block;line-height:1.6}
+
+.problem-cards{display:flex;flex-direction:column;gap:0.75rem}
+.prob-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:1.25rem 1.5rem;
+  display:flex;gap:1rem;align-items:flex-start;
+  transition:all 0.4s var(--transition);
+  cursor:default;
+}
+.prob-card:hover{
+  background:var(--card-hover);
+  border-color:rgba(0,229,200,0.2);
+  transform:translateX(6px);
+  box-shadow:var(--shadow-glow);
+}
+.prob-icon{
+  width:40px;height:40px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:1.1rem;
+  transition:transform 0.3s var(--transition-spring);
+}
+.prob-card:hover .prob-icon{transform:scale(1.1)}
+.prob-icon.red{background:var(--accent-glow);border:1px solid rgba(255,107,107,0.15)}
+.prob-icon.amber{background:var(--gold-glow);border:1px solid rgba(247,197,159,0.15)}
+.prob-icon.teal{background:var(--teal-glow2);border:1px solid rgba(0,229,200,0.15)}
+.prob-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.92rem;margin-bottom:0.3rem}
+.prob-card-text{font-size:0.84rem;color:var(--text2);line-height:1.65}
+
+/* =========================================
+   SOLUTION / FEATURES
+   ========================================= */
+#solution{position:relative}
+#solution .feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.25rem;margin-top:3.5rem;
+}
+@media(max-width:900px){#solution .feature-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){#solution .feature-grid{grid-template-columns:1fr}}
+
+.feat-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:2rem 1.75rem;
+  transition:all 0.45s var(--transition);
+  position:relative;overflow:hidden;cursor:default;
+}
+.feat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),#00ffdd);
+  transform:scaleX(0);transition:transform 0.5s var(--transition);
+  transform-origin:left;
+}
+.feat-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(0,229,200,0.05),transparent 60%);
+  opacity:0;transition:opacity 0.4s;
+}
+.feat-card:hover{
+  background:var(--card-hover);border-color:rgba(0,229,200,0.2);
+  transform:translateY(-6px);
+  box-shadow:var(--shadow-card-hover);
+}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-card:hover::after{opacity:1}
+
+.feat-num{
+  font-family:'Syne',sans-serif;font-size:0.7rem;font-weight:700;
+  color:var(--teal);text-transform:uppercase;letter-spacing:0.12em;
+  margin-bottom:1.25rem;position:relative;z-index:1;
+  opacity:0.7;
+}
+.feat-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:var(--teal-glow2);border:1px solid rgba(0,229,200,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:1.25rem;position:relative;z-index:1;
+  transition:all 0.35s var(--transition-spring);
+}
+.feat-card:hover .feat-icon{transform:scale(1.05);box-shadow:0 0 20px rgba(0,229,200,0.15)}
+.feat-title{
+  font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;
+  margin-bottom:0.65rem;color:var(--text);position:relative;z-index:1;
+}
+.feat-text{font-size:0.88rem;color:var(--text2);line-height:1.75;position:relative;z-index:1}
+
+/* =========================================
+   HOW IT WORKS
+   ========================================= */
+#how{background:var(--navy2);position:relative;overflow:hidden}
+#how::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+
+.steps{display:flex;flex-direction:column;gap:0;max-width:760px;margin:3.5rem auto 0;position:relative}
+.steps::before{
+  content:'';position:absolute;left:31px;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,var(--teal),var(--border2),transparent);
+}
+.step{display:flex;gap:1.75rem;align-items:flex-start;padding:2rem 0;position:relative}
+.step-num{
+  width:62px;height:62px;border-radius:50%;
+  border:1.5px solid rgba(0,229,200,0.3);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;
+  color:var(--teal);background:var(--navy2);
+  position:relative;z-index:1;
+  transition:all 0.4s var(--transition);
+  box-shadow:0 0 0 6px var(--navy2);
+}
+.step:hover .step-num{
+  border-color:var(--teal);
+  box-shadow:0 0 0 6px var(--navy2),0 0 20px rgba(0,229,200,0.15);
+  transform:scale(1.05);
+}
+.step-content{padding-top:0.75rem}
+.step-label{
+  font-size:0.7rem;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.14em;margin-bottom:0.4rem;
+}
+.step-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:0.5rem}
+.step-text{font-size:0.9rem;color:var(--text2);line-height:1.8}
+
+/* =========================================
+   TECH STACK
+   ========================================= */
+#tech{position:relative}
+.tech-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;margin-top:3.5rem;
+}
+@media(max-width:900px){.tech-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.tech-grid{grid-template-columns:repeat(2,1fr)}}
+
+.tech-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:1.75rem 1.25rem;
+  text-align:center;transition:all 0.4s var(--transition);
+  cursor:default;position:relative;overflow:hidden;
+}
+.tech-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 50%,rgba(0,229,200,0.04),transparent 70%);
+  opacity:0;transition:opacity 0.4s;
+}
+.tech-card:hover{
+  background:var(--card-hover);border-color:rgba(0,229,200,0.2);
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-card-hover);
+}
+.tech-card:hover::before{opacity:1}
+.tech-icon{
+  font-size:2.25rem;margin-bottom:1rem;
+  transition:transform 0.4s var(--transition-spring);
+  position:relative;z-index:1;
+}
+.tech-card:hover .tech-icon{transform:scale(1.15) translateY(-2px)}
+.tech-name{
+  font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:700;
+  margin-bottom:0.4rem;position:relative;z-index:1;
+}
+.tech-desc{font-size:0.76rem;color:var(--text3);line-height:1.6;position:relative;z-index:1}
+
+/* =========================================
+   TEAM
+   ========================================= */
+#team{background:var(--navy2);position:relative;overflow:hidden}
+#team::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.25rem;margin-top:3.5rem;
+}
+@media(max-width:900px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.team-grid{grid-template-columns:1fr}}
+
+.team-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:2rem;
+  display:flex;gap:1.25rem;align-items:flex-start;
+  transition:all 0.4s var(--transition);cursor:default;
+  position:relative;overflow:hidden;
+}
+.team-card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),transparent);
+  transform:scaleX(0);transition:transform 0.4s var(--transition);
+  transform-origin:left;
+}
+.team-card:hover{
+  background:var(--card-hover);border-color:rgba(0,229,200,0.2);
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-card-hover);
+}
+.team-card:hover::before{transform:scaleX(1)}
+
+.avatar{
+  width:56px;height:56px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;
+  flex-shrink:0;letter-spacing:-0.02em;
+  transition:all 0.35s var(--transition-spring);
+}
+.team-card:hover .avatar{transform:scale(1.08);border-radius:16px}
+.av-teal{background:rgba(0,229,200,0.1);color:var(--teal);border:1px solid rgba(0,229,200,0.15)}
+.av-coral{background:rgba(255,107,107,0.1);color:#ff8e8e;border:1px solid rgba(255,107,107,0.15)}
+.av-gold{background:rgba(247,197,159,0.1);color:var(--gold);border:1px solid rgba(247,197,159,0.15)}
+.av-blue{background:rgba(100,160,255,0.1);color:#96bbff;border:1px solid rgba(100,160,255,0.15)}
+.av-green{background:rgba(100,220,130,0.1);color:#7ad99f;border:1px solid rgba(100,220,130,0.15)}
+.av-purple{background:rgba(160,120,255,0.1);color:#c4a0ff;border:1px solid rgba(160,120,255,0.15)}
+
+.team-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.2rem}
+.team-id{font-size:0.75rem;color:var(--text3);margin-bottom:0.4rem;font-weight:400;font-variant-numeric:tabular-nums}
+.team-role{font-size:0.82rem;color:var(--teal);font-weight:500}
+.team-badge{
+  display:inline-block;
+  background:rgba(0,229,200,0.06);border:1px solid rgba(0,229,200,0.15);
+  padding:0.2rem 0.75rem;border-radius:100px;
+  font-size:0.68rem;color:var(--teal);font-weight:700;
+  margin-top:0.6rem;text-transform:uppercase;letter-spacing:0.06em;
+}
+
+/* =========================================
+   FUTURE / ROADMAP
+   ========================================= */
+#future{position:relative}
+.future-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.25rem;margin-top:3.5rem;
+}
+@media(max-width:900px){.future-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.future-grid{grid-template-columns:1fr}}
+
+.future-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:2rem;
+  position:relative;overflow:hidden;
+  transition:all 0.45s var(--transition);cursor:default;
+}
+.future-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(0,229,200,0.04),transparent 60%);
+  opacity:0;transition:opacity 0.4s;
+}
+.future-card:hover{
+  background:var(--card-hover);border-color:rgba(0,229,200,0.2);
+  transform:translateY(-5px);
+  box-shadow:var(--shadow-card-hover);
+}
+.future-card:hover::before{opacity:1}
+
+.future-card .tag{
+  font-size:0.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.1em;color:var(--text3);
+  margin-bottom:0.85rem;display:flex;align-items:center;gap:0.5rem;
+  position:relative;z-index:1;
+}
+.future-card .tag.hot{color:var(--teal)}
+.future-card .tag::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  transition:box-shadow 0.3s;
+}
+.future-card .tag.hot::before{background:var(--teal);box-shadow:0 0 6px var(--teal)}
+.future-card .tag.core::before{background:var(--text3)}
+.future-card:hover .tag.hot::before{box-shadow:0 0 12px var(--teal)}
+
+.future-title{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:1.08rem;
+  margin-bottom:0.6rem;position:relative;z-index:1;
+}
+.future-text{font-size:0.86rem;color:var(--text2);line-height:1.8;position:relative;z-index:1}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+footer{
+  padding:4rem 2rem 3rem;
+  border-top:1px solid var(--border2);
+  text-align:center;
+  position:relative;
+}
+footer::before{
+  content:'';position:absolute;top:-1px;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  opacity:0.5;
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;
+  margin-bottom:0.75rem;
+  background:linear-gradient(135deg,var(--teal),#00ffdd);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.footer-tag{
+  font-size:1rem;color:var(--text2);font-weight:300;
+  font-style:italic;margin-bottom:2rem;
+}
+.footer-links{
+  display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;
+}
+.footer-links a{
+  color:var(--text3);font-size:0.85rem;font-weight:500;
+  transition:color 0.2s;
+}
+.footer-links a:hover{color:var(--teal)}
+.footer-meta{font-size:0.78rem;color:var(--text3);letter-spacing:0.02em}
+
+/* =========================================
+   ANIMATION HELPERS
+   ========================================= */
+.reveal{opacity:0;will-change:transform,opacity}
+
+/* =========================================
+   SCROLL PROGRESS BAR
+   ========================================= */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),#00ffdd);
+  z-index:10000;transform-origin:left;transform:scaleX(0);
+  will-change:transform;
+}
+
+/* =========================================
+   RESPONSIVE POLISH
+   ========================================= */
+@media(max-width:768px){
+  section{padding:clamp(3rem,8vw,5rem) 1.25rem}
+  .hero-title{letter-spacing:-0.03em}
+  .hero-actions{flex-direction:column;align-items:center}
+  .btn-primary,.btn-secondary{width:100%;max-width:300px;justify-content:center}
+  .hero-stats{flex-direction:column;gap:1.5rem;align-items:center}
+  .hero-stat + .hero-stat{border-left:none;padding-left:0;border-top:1px solid var(--border2);padding-top:1.5rem}
+  .problem-grid{gap:2.5rem}
+  .steps::before{left:30px}
+  nav{padding:0 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor Glow -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero" id="nav-logo">Nav<span>ii</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#problem" id="nav-problem">Problem</a></li>
+    <li><a href="#solution" id="nav-solution">Solution</a></li>
+    <li><a href="#how" id="nav-how">How It Works</a></li>
+    <li><a href="#tech" id="nav-tech">Technology</a></li>
+    <li><a href="#team" id="nav-team">Team</a></li>
+    <li><a href="#future" id="nav-future">Roadmap</a></li>
+  </ul>
+  <a class="nav-cta" href="#team" id="nav-cta-btn">Meet the Team</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#problem" onclick="closeMenu()">Problem</a>
+  <a href="#solution" onclick="closeMenu()">Solution</a>
+  <a href="#how" onclick="closeMenu()">How It Works</a>
+  <a href="#tech" onclick="closeMenu()">Technology</a>
+  <a href="#team" onclick="closeMenu()">Team</a>
+  <a href="#future" onclick="closeMenu()">Roadmap</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-content">
+    <div class="hero-badge reveal">
+      <span class="hero-badge-dot"></span>
+      University Engineering Showcase &nbsp;·&nbsp; 2024–2025
+    </div>
+    <h1 class="hero-title reveal">See the World<br>Through <em>Navii</em></h1>
+    <p class="hero-subtitle reveal">AI-powered smart glasses that give visually impaired individuals real-time environmental awareness, independence, and safety — without a screen, without a phone.</p>
+    <div class="hero-actions reveal">
+      <a class="btn-primary" href="#solution" id="hero-cta-discover">
+        Discover the Project
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a class="btn-secondary" href="#team" id="hero-cta-team">Meet the Team</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hero-stat">
+        <span class="hero-stat-val">253M+</span>
+        <span class="hero-stat-lbl">People affected globally</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">Real-Time</span>
+        <span class="hero-stat-lbl">AI obstacle detection</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">Proactive</span>
+        <span class="hero-stat-lbl">Warns before danger</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">&lt;$150</span>
+        <span class="hero-stat-lbl">Target component cost</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="problem-grid">
+      <div class="problem-text">
+        <div class="section-tag reveal">The Problem</div>
+        <h2 class="section-title reveal">A World Not Built for Everyone</h2>
+        <div class="divider reveal"></div>
+        <p class="reveal">Visual impairment affects over <strong>253 million people worldwide</strong> — yet the tools available to them have changed little in decades. The traditional white cane is effective, but fundamentally limited.</p>
+        <p class="reveal">It only detects what is directly underfoot. A chair at chest height, a glass door, a staircase ahead — these remain invisible until it's <strong>too late</strong>. The problem is not just vision loss. It is the <strong>loss of safety, confidence, and independence</strong>.</p>
+        <p class="reveal">Existing tech solutions require visual screen interaction, sighted setup, or constant manual operation — making them impractical for daily independent use.</p>
+      </div>
+      <div>
+        <div class="stat-highlight reveal">
+          <span class="stat-num">253M+</span>
+          <span class="stat-lbl">People living with visual impairment globally<br><small style="color:var(--text3)">Source: World Health Organization</small></span>
+        </div>
+        <div class="problem-cards">
+          <div class="prob-card reveal">
+            <div class="prob-icon red">&#9888;</div>
+            <div>
+              <div class="prob-card-title">Traditional Cane Falls Short</div>
+              <div class="prob-card-text">Only detects ground-level obstacles — no awareness of chest or head-height hazards.</div>
+            </div>
+          </div>
+          <div class="prob-card reveal">
+            <div class="prob-icon amber">&#128241;</div>
+            <div>
+              <div class="prob-card-title">Apps Require Sight to Use</div>
+              <div class="prob-card-text">Smartphone solutions demand screen interaction and sighted setup — defeating the purpose.</div>
+            </div>
+          </div>
+          <div class="prob-card reveal">
+            <div class="prob-icon teal">&#128279;</div>
+            <div>
+              <div class="prob-card-title">No Affordable All-in-One Exists</div>
+              <div class="prob-card-text">No wearable combines detection, recognition, text reading, and audio feedback at scale.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:1rem">
+      <div class="section-tag reveal" style="justify-content:center">Our Solution</div>
+      <h2 class="section-title reveal">Introducing Navii</h2>
+      <p class="section-sub reveal" style="margin:1rem auto 0">A wearable AI system that transforms passive navigation into an informed, confident, and fully independent experience.</p>
+    </div>
+    <div class="divider reveal" style="margin:1.5rem auto 0"></div>
+    <div class="feature-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">🔊</div>
+        <div class="feat-num">Feature 01</div>
+        <div class="feat-title">Multi-Level Obstacle Detection</div>
+        <div class="feat-text">Ultrasonic sensors detect obstacles at ground, waist, and head levels within a 3-meter range. Haptic feedback intensity increases as hazards get closer.</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🤖</div>
+        <div class="feat-num">Feature 02</div>
+        <div class="feat-title">AI Object Classification</div>
+        <div class="feat-text">YOLO-based on-device AI classifies objects in real time — telling the user not just "something is there" but "a chair is ahead" or "a person is approaching."</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📖</div>
+        <div class="feat-num">Feature 03</div>
+        <div class="feat-title">OCR Text Reading</div>
+        <div class="feat-text">Points the camera at any printed text — signs, labels, menus — and reads it aloud instantly. Dramatically expands independence in public spaces.</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">👓</div>
+        <div class="feat-num">Feature 04</div>
+        <div class="feat-title">Hands-Free &amp; Screen-Free</div>
+        <div class="feat-text">No phone. No screen. No buttons. Navii works automatically from the moment it is worn — fully passive, always on.</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🎧</div>
+        <div class="feat-num">Feature 05</div>
+        <div class="feat-title">Audio + Haptic Feedback</div>
+        <div class="feat-text">Bone conduction audio keeps ears unobstructed while delivering clear spoken descriptions. Vibration motors provide a secondary channel in noisy environments.</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-num">Feature 06</div>
+        <div class="feat-title">Lightweight Wearable Design</div>
+        <div class="feat-text">Housed in a glasses frame with an integrated rechargeable battery. Built for all-day comfort — portability was a constraint, not an afterthought.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-tag reveal" style="justify-content:center">How It Works</div>
+      <h2 class="section-title reveal">From Scene to Signal</h2>
+      <p class="section-sub reveal" style="margin:1rem auto">A continuous real-time loop that starts the moment the glasses are worn — and never stops.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-label">Capture</div>
+          <div class="step-title">The Environment is Scanned</div>
+          <div class="step-text">The camera captures continuous video frames while ultrasonic sensors emit pulses to measure the distance to nearby objects in real time.</div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-label">Analyze</div>
+          <div class="step-title">AI Processes the Scene</div>
+          <div class="step-text">The onboard AI processor runs lightweight computer vision models to detect obstacles, identify object types, and extract printed text from the captured frames.</div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-label">Decide</div>
+          <div class="step-title">Relevance is Determined</div>
+          <div class="step-text">The system evaluates proximity, object type, and context — filtering noise and determining exactly what information the user needs at that moment.</div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-label">Communicate</div>
+          <div class="step-title">The User is Alerted</div>
+          <div class="step-text">Immediate feedback is delivered: a spoken audio description of the environment, or a haptic vibration pattern indicating obstacle proximity and severity.</div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-label">Loop</div>
+          <div class="step-title">The Cycle Repeats Instantly</div>
+          <div class="step-text">The entire pipeline repeats continuously, adapting to the user's changing environment with zero manual input required — ever.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech">
+  <div class="container">
+    <div>
+      <div class="section-tag reveal">Technology</div>
+      <h2 class="section-title reveal">The Technology Inside</h2>
+      <div class="divider reveal"></div>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <div class="tech-icon">🎖️</div>
+        <div class="tech-name">Raspberry Pi</div>
+        <div class="tech-desc">Onboard AI processing unit powering the entire system</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">📷</div>
+        <div class="tech-name">Camera Module</div>
+        <div class="tech-desc">Continuous real-time video capture for scene analysis</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🔌</div>
+        <div class="tech-name">Ultrasonic Sensors</div>
+        <div class="tech-desc">Multi-angle distance measurement for obstacle proximity</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🤖</div>
+        <div class="tech-name">YOLO AI Model</div>
+        <div class="tech-desc">Lightweight on-device object detection and classification</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">👁</div>
+        <div class="tech-name">OpenCV</div>
+        <div class="tech-desc">Video frame processing and camera pipeline management</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">💬</div>
+        <div class="tech-name">TTS Engine</div>
+        <div class="tech-desc">Natural speech audio output for environment descriptions</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🎵</div>
+        <div class="tech-name">Bone Conduction</div>
+        <div class="tech-desc">Audio feedback that keeps ears open to surroundings</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🐍</div>
+        <div class="tech-name">Python</div>
+        <div class="tech-desc">Fully modular software stack for the complete pipeline</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-tag reveal" style="justify-content:center">The People</div>
+      <h2 class="section-title reveal">The Team Behind Navii</h2>
+      <p class="section-sub reveal" style="margin:1rem auto">Six engineers. One mission. Turning a human problem into a real working solution.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="avatar av-teal">MA</div>
+        <div>
+          <div class="team-name">Mahmoud Ayman</div>
+          <div class="team-id">ID: 240102281</div>
+          <div class="team-role">Team Leader &amp; System Architecture</div>
+          <span class="team-badge">Lead</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="avatar av-coral">HS</div>
+        <div>
+          <div class="team-name">Hamza Saadallah</div>
+          <div class="team-id">ID: 240103221</div>
+          <div class="team-role">Hardware Design &amp; Sensor Integration</div>
+          <span class="team-badge">Hardware</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="avatar av-gold">RA</div>
+        <div>
+          <div class="team-name">Retaj Ahmed</div>
+          <div class="team-id">ID: 240102969</div>
+          <div class="team-role">Software Development &amp; OCR Implementation</div>
+          <span class="team-badge">Software</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="avatar av-blue">OR</div>
+        <div>
+          <div class="team-name">Omar Rady</div>
+          <div class="team-id">ID: 240102885</div>
+          <div class="team-role">AI Model Integration &amp; Data Collection</div>
+          <span class="team-badge">AI / ML</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="avatar av-purple">ZM</div>
+        <div>
+          <div class="team-name">Zeyad Mahmoud</div>
+          <div class="team-id">ID: 240103128</div>
+          <div class="team-role">Computer Vision &amp; Documentation</div>
+          <span class="team-badge">Vision</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="avatar av-green">MN</div>
+        <div>
+          <div class="team-name">Mohamed Nasser</div>
+          <div class="team-id">ID: 240102350</div>
+          <div class="team-role">Testing, Validation &amp; Performance Evaluation</div>
+          <span class="team-badge">QA / Testing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE -->
+<section id="future">
+  <div class="container">
+    <div>
+      <div class="section-tag reveal">Roadmap</div>
+      <h2 class="section-title reveal">What's Next for Navii</h2>
+      <p class="section-sub reveal">The prototype proves the concept. The roadmap takes it to a real-world product.</p>
+    </div>
+    <div class="future-grid">
+      <div class="future-card reveal">
+        <div class="tag hot">&#9654; High Priority</div>
+        <div class="future-title">Arabic Language Support</div>
+        <div class="future-text">Full Arabic TTS output and OCR text recognition — making Navii accessible to 14M+ visually impaired individuals in the Arab world.</div>
+      </div>
+      <div class="future-card reveal">
+        <div class="tag hot">&#9654; High Priority</div>
+        <div class="future-title">ESP32 Integration</div>
+        <div class="future-text">Migrating to an ESP32-based architecture to dramatically reduce device size, power consumption, and production cost — a critical step toward mass production.</div>
+      </div>
+      <div class="future-card reveal">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Cloud-Assisted AI</div>
+        <div class="future-text">Optional cloud inference for improved accuracy in complex environments, while maintaining full on-device fallback for offline use.</div>
+      </div>
+      <div class="future-card reveal">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Indoor Navigation &amp; GPS</div>
+        <div class="future-text">IMU and GPS integration for turn-by-turn audio navigation within campuses, offices, hospitals, and familiar environments.</div>
+      </div>
+      <div class="future-card reveal">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Expanded Language Support</div>
+        <div class="future-text">Beyond Arabic — adding French and Urdu to serve larger global communities of visually impaired users across different regions.</div>
+      </div>
+      <div class="future-card reveal">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Companion Mobile App</div>
+        <div class="future-text">An optional app for caregivers to configure preferences, update AI models, and review activity — without requiring any interaction from the user.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Navii</div>
+  <div class="footer-tag">"Enabling independence, one step at a time."</div>
+  <div class="footer-links">
+    <a href="#problem">Problem</a>
+    <a href="#solution">Solution</a>
+    <a href="#how">How It Works</a>
+    <a href="#tech">Technology</a>
+    <a href="#team">Team</a>
+    <a href="#future">Roadmap</a>
+  </div>
+  <div class="footer-meta">University Engineering Showcase &nbsp;·&nbsp; 2024–2025</div>
+</footer>
+
+<script>
+// =========================================
+// GSAP & ScrollTrigger Setup
+// =========================================
+gsap.registerPlugin(ScrollTrigger);
+
+// =========================================
+// Scroll Progress Bar
+// =========================================
+gsap.to('#scrollProgress', {
+  scaleX: 1,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: document.body,
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 0.3
+  }
+});
+
+// =========================================
+// Navigation
+// =========================================
+const navbar = document.getElementById('navbar');
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+// Scroll detection for nav styling
+ScrollTrigger.create({
+  start: 'top -60',
+  end: 99999,
+  toggleClass: { className: 'scrolled', targets: navbar }
+});
+
+// Active nav link highlight
+const sections = document.querySelectorAll('section[id]');
+const navLinksAll = document.querySelectorAll('.nav-links a');
+
+ScrollTrigger.create({
+  start: 'top top',
+  end: 'bottom bottom',
+  onUpdate: () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 100;
+      if (window.scrollY >= top) current = section.getAttribute('id');
+    });
+    navLinksAll.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
+    });
+  }
+});
+
+function toggleMenu() {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+}
+function closeMenu() {
+  hamburger.classList.remove('active');
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// =========================================
+// Cursor Glow (desktop)
+// =========================================
+if (window.matchMedia('(pointer: fine)').matches) {
+  const glow = document.getElementById('cursorGlow');
+  let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function animateGlow() {
+    glowX += (mouseX - glowX) * 0.08;
+    glowY += (mouseY - glowY) * 0.08;
+    glow.style.left = glowX + 'px';
+    glow.style.top = glowY + 'px';
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+}
+
+// =========================================
+// Hero Animations
+// =========================================
+// Remove .reveal class from hero elements so CSS opacity:0 doesn't fight GSAP
+document.querySelectorAll('#hero .reveal').forEach(el => el.classList.remove('reveal'));
+
+// Set initial hidden states explicitly via GSAP
+gsap.set('.hero-badge', { y: 30, opacity: 0 });
+gsap.set('.hero-title', { y: 50, opacity: 0 });
+gsap.set('.hero-subtitle', { y: 30, opacity: 0 });
+gsap.set('.hero-actions', { y: 20, opacity: 0 });
+gsap.set('.hero-stats', { y: 30, opacity: 0 });
+gsap.set('.hero-stat', { y: 20, opacity: 0 });
+
+const heroTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
+heroTL
+  .to('.hero-badge', { y: 0, opacity: 1, duration: 0.8, delay: 0.3 })
+  .to('.hero-title', { y: 0, opacity: 1, duration: 1 }, '-=0.4')
+  .to('.hero-subtitle', { y: 0, opacity: 1, duration: 0.8 }, '-=0.5')
+  .to('.hero-actions', { y: 0, opacity: 1, duration: 0.7 }, '-=0.4')
+  .to('.hero-stats', { y: 0, opacity: 1, duration: 0.8 }, '-=0.3')
+  .to('.hero-stat', {
+    y: 0, opacity: 1, duration: 0.5, stagger: 0.1
+  }, '-=0.4');
+
+// Parallax orbs
+gsap.to('.hero-orb-1', {
+  y: -80, duration: 1, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+});
+gsap.to('.hero-orb-2', {
+  y: -50, x: -30, duration: 1, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+});
+gsap.to('.hero-orb-3', {
+  y: -100, duration: 1, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+});
+
+// =========================================
+// Scroll Reveal Animations — per-element triggers
+// =========================================
+document.querySelectorAll('.reveal').forEach(el => {
+  // Skip hero elements (animated by timeline above)
+  if (el.closest('#hero')) return;
+
+  gsap.fromTo(el,
+    { y: 40, opacity: 0 },
+    {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 90%',
+        toggleActions: 'play none none none'
+      }
+    }
+  );
+});
+
+// Staggered batch animations for grid children
+const gridConfigs = [
+  { parent: '.feature-grid', child: '.feat-card', stagger: 0.1, y: 50 },
+  { parent: '.tech-grid',    child: '.tech-card', stagger: 0.08, y: 30 },
+  { parent: '.team-grid',    child: '.team-card', stagger: 0.1, y: 40 },
+  { parent: '.future-grid',  child: '.future-card', stagger: 0.1, y: 40 },
+  { parent: '.problem-cards',child: '.prob-card', stagger: 0.12, y: 30 },
+  { parent: '.steps',        child: '.step', stagger: 0.15, y: 30 },
+];
+
+gridConfigs.forEach(({ parent, child, stagger: stg, y }) => {
+  const container = document.querySelector(parent);
+  if (!container) return;
+  const children = container.querySelectorAll(child);
+  if (!children.length) return;
+
+  // Set initial state
+  gsap.set(children, { y, opacity: 0 });
+
+  ScrollTrigger.create({
+    trigger: container,
+    start: 'top 85%',
+    onEnter: () => {
+      gsap.to(children, {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        ease: 'power3.out',
+        stagger: stg,
+      });
+    },
+    once: true
+  });
+});
+
+// =========================================
+// Smooth scroll for all anchor links
+// =========================================
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (!target) return;
+    const offset = 80;
+    const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+});
+
+// =========================================
+// Button Ripple Effect
+// =========================================
+document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const ripple = document.createElement('span');
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.cssText = `
+      position:absolute;border-radius:50%;
+      width:${size}px;height:${size}px;
+      left:${e.clientX - rect.left - size/2}px;
+      top:${e.clientY - rect.top - size/2}px;
+      background:rgba(255,255,255,0.3);
+      transform:scale(0);animation:rippleAnim 0.6s ease-out forwards;
+      pointer-events:none;
+    `;
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  });
+});
+
+// Add ripple keyframe
+const style = document.createElement('style');
+style.textContent = `@keyframes rippleAnim{to{transform:scale(2.5);opacity:0}}`;
+document.head.appendChild(style);
+
+// =========================================
+// Stat Counter Animation
+// =========================================
+const statNum = document.querySelector('.stat-num');
+if (statNum) {
+  ScrollTrigger.create({
+    trigger: statNum,
+    start: 'top 85%',
+    onEnter: () => {
+      gsap.from(statNum, {
+        textContent: 0,
+        duration: 2,
+        ease: 'power2.out',
+        snap: { textContent: 1 },
+        onUpdate: function() {
+          // Only animate if pure number
+        }
+      });
+      gsap.from(statNum, {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out'
+      });
+    },
+    once: true
+  });
+}
+
+// =========================================
+// Performance: Reduce motion for prefers-reduced-motion
+// =========================================
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  gsap.globalTimeline.timeScale(20); // speed through animations
+  document.querySelectorAll('.reveal').forEach(el => el.style.opacity = 1);
+}
+</script>
+</body>
+</html>

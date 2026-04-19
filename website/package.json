@@ -1,0 +1,12 @@
+{
+  "name": "navii-website",
+  "version": "1.0.0",
+  "description": "Navii — Smart Assistive Glasses landing page",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js --port=3000"
+  },
+  "keywords": ["navii", "assistive-technology", "smart-glasses", "landing-page"],
+  "license": "MIT"
+}

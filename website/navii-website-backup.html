@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navii — Smart Assistive Glasses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1B2A;
+  --navy2:#152033;
+  --teal:#0ABFBC;
+  --teal2:#07A3A0;
+  --accent:#FF6B6B;
+  --gold:#F7C59F;
+  --text:#E8F1F8;
+  --text2:#8BAABF;
+  --text3:#4A6B82;
+  --border:rgba(10,191,188,0.15);
+  --card:rgba(255,255,255,0.03);
+  --card-hover:rgba(10,191,188,0.06);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.7}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;line-height:1.15}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:all .3s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(13,27,42,0.92);backdrop-filter:blur(12px);border-color:var(--border)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--teal);letter-spacing:-.02em}
+.nav-logo span{color:var(--text)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-cta{background:var(--teal);color:var(--navy);padding:.5rem 1.25rem;border-radius:6px;font-weight:600;font-size:.85rem;text-decoration:none;transition:all .2s;font-family:'Syne',sans-serif}
+.nav-cta:hover{background:var(--teal2);transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:7rem 2rem 5rem;position:relative;overflow:hidden;text-align:center}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(10,191,188,.07) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.4;pointer-events:none}
+.hero-content{position:relative;z-index:1;max-width:860px}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(10,191,188,.1);border:1px solid var(--border);padding:.35rem 1rem;border-radius:100px;font-size:.8rem;color:var(--teal);font-weight:500;margin-bottom:2rem;letter-spacing:.05em}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero-title{font-size:clamp(3rem,8vw,5.5rem);font-weight:800;letter-spacing:-.03em;margin-bottom:1.5rem;line-height:1.05}
+.hero-title em{font-style:normal;color:var(--teal)}
+.hero-subtitle{font-size:1.15rem;color:var(--text2);max-width:580px;margin:0 auto 2.5rem;font-weight:300;line-height:1.8}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--teal);color:var(--navy);padding:.8rem 2rem;border-radius:8px;font-weight:700;font-size:.95rem;text-decoration:none;transition:all .25s;font-family:'Syne',sans-serif;letter-spacing:-.01em}
+.btn-primary:hover{background:var(--teal2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,191,188,.25)}
+.btn-secondary{background:transparent;color:var(--text);padding:.8rem 2rem;border-radius:8px;font-weight:600;font-size:.95rem;text-decoration:none;border:1px solid var(--border);transition:all .25s;font-family:'Syne',sans-serif}
+.btn-secondary:hover{border-color:var(--teal);color:var(--teal)}
+.hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:4rem;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-val{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--teal);display:block}
+.hero-stat-lbl{font-size:.8rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+
+/* SECTIONS */
+section{padding:6rem 2rem}
+.container{max-width:1100px;margin:0 auto}
+.section-tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.section-tag::before{content:'';width:20px;height:1px;background:var(--teal)}
+.section-title{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.03em;margin-bottom:1rem}
+.section-sub{font-size:1.05rem;color:var(--text2);max-width:580px;font-weight:300;line-height:1.8;margin-bottom:3rem}
+.divider{width:48px;height:3px;background:var(--teal);border-radius:2px;margin:1.5rem 0}
+
+/* PROBLEM */
+#problem{background:var(--navy2)}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+@media(max-width:768px){.problem-grid{grid-template-columns:1fr}}
+.problem-text p{color:var(--text2);line-height:1.9;margin-bottom:1rem;font-weight:300}
+.problem-text p strong{color:var(--text);font-weight:500}
+.problem-cards{display:flex;flex-direction:column;gap:1rem}
+.prob-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:all .3s}
+.prob-card:hover{background:var(--card-hover);border-color:rgba(10,191,188,.3)}
+.prob-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+.prob-icon.red{background:rgba(255,107,107,.1)}
+.prob-icon.amber{background:rgba(247,197,159,.1)}
+.prob-icon.teal{background:rgba(10,191,188,.1)}
+.prob-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:.25rem}
+.prob-card-text{font-size:.85rem;color:var(--text2);line-height:1.6}
+.stat-highlight{background:linear-gradient(135deg,rgba(10,191,188,.08),rgba(10,191,188,.02));border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;margin-bottom:1.5rem}
+.stat-num{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:var(--teal);display:block;line-height:1}
+.stat-lbl{font-size:.85rem;color:var(--text2);margin-top:.5rem;display:block}
+
+/* SOLUTION */
+#solution .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;margin-top:3rem}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;transition:all .35s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal);transform:scaleX(0);transition:transform .35s;transform-origin:left}
+.feat-card:hover{background:var(--card-hover);border-color:rgba(10,191,188,.3);transform:translateY(-4px)}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-num{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.feat-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.6rem;color:var(--text)}
+.feat-text{font-size:.88rem;color:var(--text2);line-height:1.75}
+
+/* HOW IT WORKS */
+#how{background:var(--navy2)}
+.steps{display:flex;flex-direction:column;gap:0;max-width:720px;margin:3rem auto 0;position:relative}
+.steps::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:1px;background:var(--border)}
+.step{display:flex;gap:1.5rem;align-items:flex-start;padding:1.5rem 0}
+.step-num{width:56px;height:56px;border-radius:50%;border:1px solid var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--teal);background:var(--navy);position:relative;z-index:1}
+.step-content{padding-top:.6rem}
+.step-label{font-size:.7rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.3rem}
+.step-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:.4rem}
+.step-text{font-size:.9rem;color:var(--text2);line-height:1.75}
+
+/* TECH STACK */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:3rem}
+.tech-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1rem;text-align:center;transition:all .3s}
+.tech-card:hover{background:var(--card-hover);border-color:rgba(10,191,188,.3)}
+.tech-icon{font-size:2rem;margin-bottom:.75rem}
+.tech-name{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+.tech-desc{font-size:.75rem;color:var(--text3);line-height:1.5}
+
+/* TEAM */
+#team{background:var(--navy2)}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-top:3rem}
+.team-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start;transition:all .35s}
+.team-card:hover{background:var(--card-hover);border-color:rgba(10,191,188,.3);transform:translateY(-3px)}
+.avatar{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;flex-shrink:0;letter-spacing:-.02em}
+.av-teal{background:rgba(10,191,188,.12);color:var(--teal)}
+.av-coral{background:rgba(255,107,107,.12);color:#FF8E8E}
+.av-gold{background:rgba(247,197,159,.12);color:var(--gold)}
+.av-blue{background:rgba(100,160,255,.12);color:#96BBFF}
+.av-green{background:rgba(100,220,130,.12);color:#7AD99F}
+.av-purple{background:rgba(160,120,255,.12);color:#C4A0FF}
+.team-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:.2rem}
+.team-id{font-size:.75rem;color:var(--text3);font-family:'DM Sans',sans-serif;margin-bottom:.35rem;font-weight:400}
+.team-role{font-size:.82rem;color:var(--teal);font-weight:500}
+.team-badge{display:inline-block;background:rgba(10,191,188,.08);border:1px solid rgba(10,191,188,.2);padding:.2rem .7rem;border-radius:100px;font-size:.7rem;color:var(--teal);font-weight:600;margin-top:.5rem;text-transform:uppercase;letter-spacing:.05em}
+
+/* FUTURE */
+.future-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-top:3rem}
+.future-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;position:relative;overflow:hidden;transition:all .35s}
+.future-card:hover{background:var(--card-hover);border-color:rgba(10,191,188,.3);transform:translateY(-3px)}
+.future-card .tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+.future-card .tag.hot{color:var(--teal)}
+.future-card .tag.hot::before,.future-card .tag.core::before{content:'';width:6px;height:6px;border-radius:50%}
+.future-card .tag.hot::before{background:var(--teal)}
+.future-card .tag.core::before{background:var(--text3)}
+.future-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.5rem}
+.future-text{font-size:.86rem;color:var(--text2);line-height:1.75}
+
+/* FOOTER */
+footer{padding:3rem 2rem;border-top:1px solid var(--border);text-align:center}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:var(--teal);margin-bottom:.5rem}
+.footer-tag{font-size:.95rem;color:var(--text2);font-weight:300;font-style:italic;margin-bottom:1.5rem}
+.footer-meta{font-size:.8rem;color:var(--text3)}
+
+/* ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.visible{opacity:1;transform:none}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
+
+/* SELECTION */
+::selection{background:rgba(10,191,188,.25);color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">Nav<span>ii</span></a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#future">Future</a></li>
+  </ul>
+  <a class="nav-cta" href="#team">Meet the Team</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">University Engineering Showcase &nbsp;·&nbsp; 2024–2025</div>
+    <h1 class="hero-title">See the World<br>Through <em>Navii</em></h1>
+    <p class="hero-subtitle">AI-powered smart glasses that give visually impaired individuals real-time environmental awareness, independence, and safety — without a screen, without a phone.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#solution">Discover the Project</a>
+      <a class="btn-secondary" href="#team">Meet the Team</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-val">253M+</span>
+        <span class="hero-stat-lbl">People affected globally</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">Real-Time</span>
+        <span class="hero-stat-lbl">AI obstacle detection</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">Proactive</span>
+        <span class="hero-stat-lbl">Warns before danger</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">&lt;$150</span>
+        <span class="hero-stat-lbl">Target component cost</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="problem-grid">
+      <div class="problem-text fade-up">
+        <div class="section-tag">The Problem</div>
+        <h2 class="section-title">A World Not Built for Everyone</h2>
+        <div class="divider"></div>
+        <p>Visual impairment affects over <strong>253 million people worldwide</strong> — yet the tools available to them have changed little in decades. The traditional white cane is effective, but fundamentally limited.</p>
+        <p>It only detects what is directly underfoot. A chair at chest height, a glass door, a staircase ahead — these remain invisible until it's <strong>too late</strong>. The problem is not just vision loss. It is the <strong>loss of safety, confidence, and independence</strong>.</p>
+        <p>Existing tech solutions require visual screen interaction, sighted setup, or constant manual operation — making them impractical for daily independent use.</p>
+      </div>
+      <div class="fade-up">
+        <div class="stat-highlight">
+          <span class="stat-num">253M+</span>
+          <span class="stat-lbl">People living with visual impairment globally<br><small style="color:var(--text3)">Source: World Health Organization</small></span>
+        </div>
+        <div class="problem-cards">
+          <div class="prob-card">
+            <div class="prob-icon red">&#9888;</div>
+            <div>
+              <div class="prob-card-title">Traditional Cane Falls Short</div>
+              <div class="prob-card-text">Only detects ground-level obstacles — no awareness of chest or head-height hazards.</div>
+            </div>
+          </div>
+          <div class="prob-card">
+            <div class="prob-icon amber">&#128241;</div>
+            <div>
+              <div class="prob-card-title">Apps Require Sight to Use</div>
+              <div class="prob-card-text">Smartphone solutions demand screen interaction and sighted setup — defeating the purpose.</div>
+            </div>
+          </div>
+          <div class="prob-card">
+            <div class="prob-icon teal">&#128279;</div>
+            <div>
+              <div class="prob-card-title">No Affordable All-in-One Exists</div>
+              <div class="prob-card-text">No wearable combines detection, recognition, text reading, and audio feedback at scale.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;margin-bottom:1rem">
+      <div class="section-tag" style="justify-content:center">Our Solution</div>
+      <h2 class="section-title">Introducing Navii</h2>
+      <p class="section-sub" style="margin:1rem auto 0">A wearable AI system that transforms passive navigation into an informed, confident, and fully independent experience.</p>
+    </div>
+    <div class="divider" style="margin:1.5rem auto 0"></div>
+    <div class="feature-grid">
+      <div class="feat-card fade-up">
+        <div class="feat-num">Feature 01</div>
+        <div class="feat-title">Multi-Level Obstacle Detection</div>
+        <div class="feat-text">Ultrasonic sensors detect obstacles at ground, waist, and head levels within a 3-meter range. Haptic feedback intensity increases as hazards get closer.</div>
+      </div>
+      <div class="feat-card fade-up">
+        <div class="feat-num">Feature 02</div>
+        <div class="feat-title">AI Object Classification</div>
+        <div class="feat-text">YOLO-based on-device AI classifies objects in real time — telling the user not just "something is there" but "a chair is ahead" or "a person is approaching."</div>
+      </div>
+      <div class="feat-card fade-up">
+        <div class="feat-num">Feature 03</div>
+        <div class="feat-title">OCR Text Reading</div>
+        <div class="feat-text">Points the camera at any printed text — signs, labels, menus — and reads it aloud instantly. Dramatically expands independence in public spaces.</div>
+      </div>
+      <div class="feat-card fade-up">
+        <div class="feat-num">Feature 04</div>
+        <div class="feat-title">Hands-Free & Screen-Free</div>
+        <div class="feat-text">No phone. No screen. No buttons. Navii works automatically from the moment it is worn — fully passive, always on.</div>
+      </div>
+      <div class="feat-card fade-up">
+        <div class="feat-num">Feature 05</div>
+        <div class="feat-title">Audio + Haptic Feedback</div>
+        <div class="feat-text">Bone conduction audio keeps ears unobstructed while delivering clear spoken descriptions. Vibration motors provide a secondary channel in noisy environments.</div>
+      </div>
+      <div class="feat-card fade-up">
+        <div class="feat-num">Feature 06</div>
+        <div class="feat-title">Lightweight Wearable Design</div>
+        <div class="feat-text">Housed in a glasses frame with an integrated rechargeable battery. Built for all-day comfort — portability was a constraint, not an afterthought.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="fade-up" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">How It Works</div>
+      <h2 class="section-title">From Scene to Signal</h2>
+      <p class="section-sub" style="margin:1rem auto">A continuous real-time loop that starts the moment the glasses are worn — and never stops.</p>
+    </div>
+    <div class="steps fade-up">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-label">Capture</div>
+          <div class="step-title">The Environment is Scanned</div>
+          <div class="step-text">The camera captures continuous video frames while ultrasonic sensors emit pulses to measure the distance to nearby objects in real time.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-label">Analyze</div>
+          <div class="step-title">AI Processes the Scene</div>
+          <div class="step-text">The onboard AI processor runs lightweight computer vision models to detect obstacles, identify object types, and extract printed text from the captured frames.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-label">Decide</div>
+          <div class="step-title">Relevance is Determined</div>
+          <div class="step-text">The system evaluates proximity, object type, and context — filtering noise and determining exactly what information the user needs at that moment.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-label">Communicate</div>
+          <div class="step-title">The User is Alerted</div>
+          <div class="step-text">Immediate feedback is delivered: a spoken audio description of the environment, or a haptic vibration pattern indicating obstacle proximity and severity.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-label">Loop</div>
+          <div class="step-title">The Cycle Repeats Instantly</div>
+          <div class="step-text">The entire pipeline repeats continuously, adapting to the user's changing environment with zero manual input required — ever.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-tag">Technology</div>
+      <h2 class="section-title">The Technology Inside</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#127382;</div>
+        <div class="tech-name">Raspberry Pi</div>
+        <div class="tech-desc">Onboard AI processing unit powering the entire system</div>
+      </div>
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#128247;</div>
+        <div class="tech-name">Camera Module</div>
+        <div class="tech-desc">Continuous real-time video capture for scene analysis</div>
+      </div>
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#128268;</div>
+        <div class="tech-name">Ultrasonic Sensors</div>
+        <div class="tech-desc">Multi-angle distance measurement for obstacle proximity</div>
+      </div>
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#129302;</div>
+        <div class="tech-name">YOLO AI Model</div>
+        <div class="tech-desc">Lightweight on-device object detection and classification</div>
+      </div>
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#128065;</div>
+        <div class="tech-name">OpenCV</div>
+        <div class="tech-desc">Video frame processing and camera pipeline management</div>
+      </div>
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#128172;</div>
+        <div class="tech-name">TTS Engine</div>
+        <div class="tech-desc">Natural speech audio output for environment descriptions</div>
+      </div>
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#128250;</div>
+        <div class="tech-name">Bone Conduction</div>
+        <div class="tech-desc">Audio feedback that keeps ears open to surroundings</div>
+      </div>
+      <div class="tech-card fade-up">
+        <div class="tech-icon">&#128013;</div>
+        <div class="tech-name">Python</div>
+        <div class="tech-desc">Fully modular software stack for the complete pipeline</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div class="fade-up" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">The People</div>
+      <h2 class="section-title">The Team Behind Navii</h2>
+      <p class="section-sub" style="margin:1rem auto">Six engineers. One mission. Turning a human problem into a real working solution.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fade-up">
+        <div class="avatar av-teal">MA</div>
+        <div>
+          <div class="team-name">Mahmoud Ayman</div>
+          <div class="team-id">ID: 240102281</div>
+          <div class="team-role">Team Leader &amp; System Architecture</div>
+          <span class="team-badge">Lead</span>
+        </div>
+      </div>
+      <div class="team-card fade-up">
+        <div class="avatar av-coral">HS</div>
+        <div>
+          <div class="team-name">Hamza Saadallah</div>
+          <div class="team-id">ID: 240103221</div>
+          <div class="team-role">Hardware Design &amp; Sensor Integration</div>
+          <span class="team-badge">Hardware</span>
+        </div>
+      </div>
+      <div class="team-card fade-up">
+        <div class="avatar av-gold">RA</div>
+        <div>
+          <div class="team-name">Retaj Ahmed</div>
+          <div class="team-id">ID: 240102969</div>
+          <div class="team-role">Software Development &amp; OCR Implementation</div>
+          <span class="team-badge">Software</span>
+        </div>
+      </div>
+      <div class="team-card fade-up">
+        <div class="avatar av-blue">OR</div>
+        <div>
+          <div class="team-name">Omar Rady</div>
+          <div class="team-id">ID: 240102885</div>
+          <div class="team-role">AI Model Integration &amp; Data Collection</div>
+          <span class="team-badge">AI / ML</span>
+        </div>
+      </div>
+      <div class="team-card fade-up">
+        <div class="avatar av-purple">ZM</div>
+        <div>
+          <div class="team-name">Zeyad Mahmoud</div>
+          <div class="team-id">ID: 240103128</div>
+          <div class="team-role">Computer Vision &amp; Documentation</div>
+          <span class="team-badge">Vision</span>
+        </div>
+      </div>
+      <div class="team-card fade-up">
+        <div class="avatar av-green">MN</div>
+        <div>
+          <div class="team-name">Mohamed Nasser</div>
+          <div class="team-id">ID: 240102350</div>
+          <div class="team-role">Testing, Validation &amp; Performance Evaluation</div>
+          <span class="team-badge">QA / Testing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE -->
+<section id="future">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-tag">Roadmap</div>
+      <h2 class="section-title">What's Next for Navii</h2>
+      <p class="section-sub">The prototype proves the concept. The roadmap takes it to a real-world product.</p>
+    </div>
+    <div class="future-grid">
+      <div class="future-card fade-up">
+        <div class="tag hot">&#9654; High Priority</div>
+        <div class="future-title">Arabic Language Support</div>
+        <div class="future-text">Full Arabic TTS output and OCR text recognition — making Navii accessible to 14M+ visually impaired individuals in the Arab world.</div>
+      </div>
+      <div class="future-card fade-up">
+        <div class="tag hot">&#9654; High Priority</div>
+        <div class="future-title">ESP32 Integration</div>
+        <div class="future-text">Migrating to an ESP32-based architecture to dramatically reduce device size, power consumption, and production cost — a critical step toward mass production.</div>
+      </div>
+      <div class="future-card fade-up">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Cloud-Assisted AI</div>
+        <div class="future-text">Optional cloud inference for improved accuracy in complex environments, while maintaining full on-device fallback for offline use.</div>
+      </div>
+      <div class="future-card fade-up">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Indoor Navigation &amp; GPS</div>
+        <div class="future-text">IMU and GPS integration for turn-by-turn audio navigation within campuses, offices, hospitals, and familiar environments.</div>
+      </div>
+      <div class="future-card fade-up">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Expanded Language Support</div>
+        <div class="future-text">Beyond Arabic — adding French and Urdu to serve larger global communities of visually impaired users across different regions.</div>
+      </div>
+      <div class="future-card fade-up">
+        <div class="tag core">&#9654; Core Enhancement</div>
+        <div class="future-title">Companion Mobile App</div>
+        <div class="future-text">An optional app for caregivers to configure preferences, update AI models, and review activity — without requiring any interaction from the user.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Navii</div>
+  <div class="footer-tag">"Enabling independence, one step at a time."</div>
+  <div class="footer-meta">University Engineering Showcase &nbsp;·&nbsp; 2024–2025</div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const nav=document.getElementById('navbar');
+  nav.classList.toggle('scrolled',window.scrollY>50);
+  document.querySelectorAll('.fade-up').forEach(el=>{
+    const rect=el.getBoundingClientRect();
+    if(rect.top<window.innerHeight-80)el.classList.add('visible');
+  });
+});
+function toggleMenu(){
+  const links=document.querySelector('.nav-links');
+  const cta=document.querySelector('.nav-cta');
+  if(links.style.display==='flex'){
+    links.style.display='';cta.style.display='';
+  } else {
+    links.style.display='flex';links.style.flexDirection='column';
+    links.style.position='absolute';links.style.top='70px';
+    links.style.left='0';links.style.right='0';
+    links.style.background='var(--navy2)';links.style.padding='1.5rem 2rem';
+    links.style.borderBottom='1px solid var(--border)';
+    cta.style.display='none';
+  }
+}
+document.querySelectorAll('.fade-up').forEach(el=>{
+  const rect=el.getBoundingClientRect();
+  if(rect.top<window.innerHeight-80)el.classList.add('visible');
+});
+</script>
+</body>
+</html>
